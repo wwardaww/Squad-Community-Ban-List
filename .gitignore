@@ -8,3 +8,6 @@ yarn.lock
 
 # IDEs
 .idea/
+
+# errors
+yarn-error.log
