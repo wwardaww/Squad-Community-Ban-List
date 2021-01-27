@@ -16,6 +16,7 @@ import BecomeAPartnerOrganisation from './pages/become-a-partner-organisation.js
 
 import FAQ from './pages/faq.js';
 import PartnerOrganisationList from './pages/partner-organisation-list.js';
+import Organisation from './pages/organisation.js';
 
 // import Auth from '../utils/auth.js';
 
@@ -109,6 +110,12 @@ const routes = [
     exact: true,
     login: false,
     component: PartnerOrganisationList
+  },
+  {
+    path: '/organisation/:id',
+    exact: true,
+    login: false,
+    component: Organisation
   }
 ];
 

@@ -8,6 +8,9 @@ export default {
         order: [['name', 'ASC']]
       });
     },
+    organisation: (parent, filter) => {
+      return Organisation.findByPk(filter.id);
+    },
     banLists: () => {
       return BanList.findAll({
         order: [['name', 'ASC']]

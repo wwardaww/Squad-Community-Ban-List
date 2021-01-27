@@ -6,9 +6,9 @@ import { Card, CardBody, Container, Modal, ModalBody, ModalHeader, Table } from 
 import Layout from '../layout/layout.js';
 import { AdvancedModal } from '../../components';
 
-const query = gql`
-  query {
-    organisations {
+const organisationQuery = gql`
+  query OrganisationGet($id: Int!) {
+    organisation(id: $id) {
       id
       name
       discord
@@ -21,9 +21,16 @@ const query = gql`
   }
 `;
 
-export default function () {
-  const { loading, error, data } = useQuery(query);
+const QueryMultiple = (organisationId) => {
+  const organisation = useQuery(organisationQuery, { variables: { id: parseInt(organisationId) } });
+  console.log(organisation);
+  //const players = useQuery(...);
+  return { organisation };
+};
 
+export default function (props) {
+  const { id } = props.match.params;
+  const { organisation } = QueryMultiple(id);
   return (
     <Layout>
       <section className="section section-lg pt-lg-0 mt--200">
@@ -46,7 +53,7 @@ export default function () {
                 </tr>
               </thead>
               <tbody>
-                {loading && (
+                {organisation.loading && (
                   <tr>
                     <td colSpan={2} className="text-center">
                       <div className="text-center mt-2 mb-3">Loading...</div>
@@ -56,26 +63,25 @@ export default function () {
                     </td>
                   </tr>
                 )}
-                {error && (
+                {organisation.error && (
                   <tr>
                     <td colSpan={2} className="text-center">
                       <div className="text-center mt-2 mb-2">Error!</div>
                       <div className="btn-wrapper text-center">
                         <i className="fas fa-exclamation-triangle fa-4x" />
                       </div>
-                      <div className="text-center mt-2 mb-2">Something went wrong. Sad times.</div>
+                      <div className="text-center mt-2 mb-2">
+                        Something went wrong. Sad times. {organisation.error.message}
+                      </div>
                     </td>
                   </tr>
                 )}
-                {data &&
-                  data.organisations.map((organisation, key) => (
-                    <tr key={key}>
-                      <td>
-                        <a href={'/organisation/' + organisation.id}>{organisation.name}</a>
-                      </td>
-                      <td>{organisation.banLists.map((banList) => banList.name).join(', ')}</td>
-                    </tr>
-                  ))}
+                {organisation.data && (
+                  <tr>
+                    {' '}
+                    <td>arda{organisation.data.organisation?.name}</td>
+                  </tr>
+                )}
               </tbody>
             </Table>
           </Card>
